@@ -1,2 +1,2 @@
 # bookit
-next Js project
+Hotel Booking Next Js Project
