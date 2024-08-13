@@ -1,0 +1,25 @@
+{
+  "name": "bookit",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "seeder": "npx tsc ./seeder/seeder.ts --outDir .temp && node .temp/seeder/seeder.js && rm -rf .temp"
+  },
+  "dependencies": {
+    "mongoose": "^8.5.2",
+    "next": "14.2.5",
+    "next-connect": "^1.0.0",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
+  }
+}
