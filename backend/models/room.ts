@@ -22,24 +22,25 @@ export interface ILocation {
 }
 
 export interface IRoom extends Document {
-    name: String,
-    description: string,
-    pricePerNight: number,
-    address: string,
-    location: ILocation,
-    guestCapacity: number,
-    isInternet: boolean,
-    isBreakfast: boolean,
-    isAirConditioned: boolean,
-    isPetsAllowed: boolean,
-    isRoomCleaning: boolean,
-    ratings: number,
-    numOfReview: number,
-    images: IImage,
-    category: string,
-    reviews: IReview[],
-    user: mongoose.Schema.Types.ObjectId
-    createdAt: Date
+    name: String;
+    description: string;
+    pricePerNight: number;
+    address: string;
+    location: ILocation;
+    guestCapacity: number;
+    numOfBeds: number;
+    isInternet: boolean;
+    isBreakfast: boolean;
+    isAirConditioned: boolean;
+    isPetsAllowed: boolean;
+    isRoomCleaning: boolean;
+    ratings: number;
+    numOfReview: number;
+    images: IImage;
+    category: string;
+    reviews: IReview[];
+    user: mongoose.Schema.Types.ObjectId;
+    createdAt: Date;
 } 
 
 const roomSchema: Schema = new Schema({
