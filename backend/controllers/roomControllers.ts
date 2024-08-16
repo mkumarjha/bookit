@@ -9,7 +9,7 @@ export const allRooms = catchAsyncErrors(async(req: NextRequest) => {
     const resPerPage = 8;
     //const rooms = await Room.find();
     const { searchParams } = new URL(req.url);
-    //console.log(searchParams);
+    //console.log(searchParams); 
     const queryStr: any = {};
 
     searchParams.forEach((value, key)=>{
