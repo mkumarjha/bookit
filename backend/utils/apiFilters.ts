@@ -21,11 +21,18 @@ class APIFilters {
 
     filter(): APIFilters {
         const queryCopy = { ...this.queryStr };
-        const removeFields = ["location"]
+        const removeFields = ["location","page"]
         removeFields.forEach((el) => delete queryCopy[el]);
         this.query = this.query.find(queryCopy);
         return this;
     }
+
+    pagination(resPerPage: number): APIFilters {
+        const currentPage = Number(this.queryStr?.page) || 1;
+        const skip = resPerPage * (currentPage -1);
+        this.query = this.query.limit(resPerPage).skip(skip);
+        return this;
+    } 
 }
 
 export default APIFilters;
