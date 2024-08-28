@@ -19,19 +19,19 @@ const RoomDetails = ({ data }: Props) =>{
     const { room } = data;
 
     return <div className="container container-fluid">
-    <h2 className="mt-5">Lorem Ipsum Room</h2>
-    <p>1234 Lorem Ipsum Street, Lorem City</p>
+    <h2 className="mt-5">{room?.name}</h2>
+    <p>{room.address}</p>
 
     <div className="ratings mt-auto mb-3">      
         <StarRatings
             rating={room?.ratings}
             starRatedColor="#e61e4d"
             numberOfStars={5}
-            starDimension="18px"
+            starDimension="22px"
             starSpacing="1px"
             name='rating'
         />
-        <span className="no-of-reviews">(50 Reviews)</span>      
+        <span className="no-of-reviews">({room?.numOfReview} Reviews)</span>      
     </div>
     <RoomImageSlider images={room?.images} />
 
@@ -39,12 +39,7 @@ const RoomDetails = ({ data }: Props) =>{
       <div className="col-12 col-md-6 col-lg-8">
         <h3>Description</h3>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-          fermentum nulla sit amet eros iaculis, id venenatis purus tempor.
-          Sed bibendum bibendum tellus, sed suscipit elit condimentum nec.
-          Aliquam id venenatis ipsum. Sed vel lorem vitae leo sodales iaculis.
-          Sed vehicula, tellus in ultrices vestibulum, erat quam fermentum
-          tortor, quis feugiat erat dolor in est.
+          {room?.description}
         </p>
 
         <RoomFeatures room={room} />
