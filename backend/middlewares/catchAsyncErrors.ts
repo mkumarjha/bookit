@@ -10,8 +10,6 @@ export const catchAsyncErrors = (handler: HandlerFunction ) => async (req: NextR
     try {
         return await handler(req, params);
     } catch (error: any) {
-
-        //console.log(error);
         if(error?.name === 'CastError') {
             error.message = `Resource not found. Invalid ${error?.path}`
             error.statusCode = 400;
