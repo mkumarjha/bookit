@@ -16,7 +16,7 @@ const Search = () => {
             category && `category=${encodeURIComponent(category)}`
         ].filter(Boolean).join('&');
 
-        router.push(`/?location=${queryString}`)
+        router.push(`/?${queryString}`)
     }
 
     return (
