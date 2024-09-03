@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Header = () => {
@@ -47,6 +48,7 @@ const Header = () => {
                   <a href="/" className="dropdown-item text-danger">Logout</a>
                 </div>
               </div>
+              <Link href="/login" className="btn btn-danger px-4 text-white login-header-btn float-end">Login</Link>
             </div>
           </div>
         </nav>

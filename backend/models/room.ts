@@ -29,6 +29,7 @@ export interface IRoom extends Document {
     location: ILocation;
     guestCapacity: number;
     numOfBeds: number;
+    numOfReviews: number;
     isInternet: boolean;
     isBreakfast: boolean;
     isAirConditioned: boolean;
@@ -43,7 +44,7 @@ export interface IRoom extends Document {
     createdAt: Date;
 } 
 
-const roomSchema: Schema = new Schema({
+const roomSchema: Schema<IRoom> = new Schema({
     name: {
         type: String,
         required: [true, 'Please enter room name'],
@@ -161,6 +162,8 @@ const roomSchema: Schema = new Schema({
         type: Date,
         default: Date.now
     }
+},{
+    versionKey: false
 });
 
 export default mongoose.models.Room ||

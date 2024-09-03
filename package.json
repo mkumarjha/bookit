@@ -10,9 +10,11 @@
     "seeder": "npx tsc ./seeder/seeder.ts --outDir .temp && node .temp/seeder/seeder.js && rm -rf .temp"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
     "mongoose": "^8.5.2",
     "next": "14.2.5",
+    "next-auth": "^4.24.7",
     "next-connect": "^1.0.0",
     "react": "^18",
     "react-bootstrap": "^2.10.4",
