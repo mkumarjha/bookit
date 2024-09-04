@@ -21,6 +21,8 @@ const Login = () => {
             email,
             password
         })
+        console.log("result=>",result);
+        
 
         setLoading(false);
         if(result?.error){
@@ -31,7 +33,7 @@ const Login = () => {
 
     }
     return (
-        <div className="row wrapper">
+        <div className="row wrapper p-5">
             <div className="col-10 col-lg-5">
                 <form className="shadow rounded bg-body" onSubmit={submitHandler}>
                 <h1 className="mb-3">Login</h1>
@@ -64,7 +66,7 @@ const Login = () => {
                 <button
                     id="login_button"
                     type="submit"
-                    className="btn form-btn w-100 py-2"
+                    className="btn btn-danger px-4 text-white form-btn w-100 py-2"
                     disabled={loading}
                 >
                     {loading ? <ButtonLoader /> : 'LOGIN'}                    

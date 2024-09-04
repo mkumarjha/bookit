@@ -21,8 +21,8 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
                 async authorize(credentials : Credentials) {
                     dbConnect()
                     const { email, password } = credentials;
-                    const user = await User.findOne({ email }).select('*password');
-
+                    const user = await User.findOne({ email }).select("+password");
+                    console.log('mithilesh=>',user);
                     if(!user) {
                         throw new Error('Invalid email or password');
                     }
