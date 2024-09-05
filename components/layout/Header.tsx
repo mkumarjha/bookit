@@ -36,16 +36,19 @@ const Header = () => {
                       data-bs-toggle="dropdown"
                       aria-expanded="false"
                     >
-                      <figure className="avatar avatar-nav">
-                        <img
-                          src={data?.user?.avatar ? data?.user?.avatar.url : "/images/default_avatar.jpg" }
-                          alt="John Doe"
-                          className="rounded-circle placeholder-glow"
-                          height="50"
-                          width="50"
-                        />
-                      </figure>
-                      <span className="placeholder-glow ps-1"> {data?.user?.name}</span>
+                        <figure className="avatar avatar-nav">
+                            <img
+                            src={data?.user?.avatar ? data?.user?.avatar.url : "/images/default_avatar.jpg" }
+                            alt="John Doe"
+                            className="rounded-circle placeholder-glow"
+                            height="50"
+                            width="50"
+                            />
+                        </figure>
+                        <span className="placeholder-glow ps-1"> 
+                            {''}
+                            {data?.user?.name}
+                        </span>
                     </button>
     
                     <div
@@ -62,17 +65,16 @@ const Header = () => {
                     <>
                     { data=== undefined && (
                         <div className="placeholder-glow">
-                            <figure className="avatar avatar-nav placeholder bg-secondary">
-                                
+                            <figure className="avatar avatar-nav placeholder bg-secondary">                                
                             </figure>
+                            <span className="placeholder w-25 bg-secondary ms-2"></span>
                         </div>
                     )}
                     { data == null && (
                         <Link href="/login" className="btn btn-danger px-4 text-white login-header-btn float-right">Login</Link>
                         )
                     }
-                    </>
-                    
+                    </>                    
                 )}
             </div>
           </div>
