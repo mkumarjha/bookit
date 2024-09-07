@@ -9,8 +9,7 @@ const Header = () => {
     const dispatch = useAppDispatch();
     const { user } = useAppSelector((state)=> state.auth);
     const { data } = useSession();
-    //console.log('mk=>',data);
-
+    
     useEffect(()=>{
       if(data){
         dispatch(setUser(data?.user))

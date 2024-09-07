@@ -10,6 +10,10 @@ type Credentials = {
     password: string;
 }
 
+type Token = {
+    user: IUser
+} 
+
 async function auth(req: NextApiRequest, res: NextApiResponse) {
     return await NextAuth(req, res, {
         session: {
@@ -22,7 +26,6 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
                     dbConnect()
                     const { email, password } = credentials;
                     const user = await User.findOne({ email }).select("+password");
-                    console.log('mithilesh=>',user);
                     if(!user) {
                         throw new Error('Invalid email or password');
                     }
@@ -42,18 +45,24 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
         ],
         callbacks: {
             jwt: async ({ token, user }) => {
-                console.log(token, user);
+                const jwtToken = token as Token;
                 user && (token.user = user);
 
-                //TODO -update session when user is updated
-
+                //update session when user is updated
+                if(req.url?.includes("/api/auth/session?update")){
+                    //Hit the database and return the updated user
+                    const updatedUser = await User.findById(jwtToken.user._id);
+                    token.user = updatedUser;
+                }
                 return token;
             },
             session: async ({ session, token }) => {
                 session.user = token.user as IUser;
-                console.log('session=>' , session);
                 return session;
             }
+        },
+        pages: {
+            signIn: '/login'
         },
         secret: process.env.NEXTAUTH_SECRET
     })

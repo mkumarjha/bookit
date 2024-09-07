@@ -21,9 +21,7 @@ const Login = () => {
             email,
             password
         })
-        console.log("result=>",result);
         
-
         setLoading(false);
         if(result?.error){
             toast.error(result.error)
@@ -73,7 +71,7 @@ const Login = () => {
                 </button>
 
                 <div className="mt-3 mb-4">
-                    <a href="/register" className="float-end"> New User? Register Here </a>
+                    <Link href="/register" className="float-end"> New User? Register Here </Link>
                 </div>
                 </form>
             </div>
