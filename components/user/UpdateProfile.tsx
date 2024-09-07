@@ -21,7 +21,6 @@ const UpdateProfile = ()=>{
 
     const [updateSession, { data }] = useLazyUpdateSessionQuery();
 
-    console.log(data);
     if(data) dispatch(setUser(data?.user))
 
     useEffect(()=>{
@@ -31,7 +30,7 @@ const UpdateProfile = ()=>{
         }
 
         if(error && 'data' in error) {
-            toast.error(error?.data?.message)
+            toast.error(error?.data?.errMessage)
         }
 
         if(isSuccess) {
@@ -50,7 +49,7 @@ const UpdateProfile = ()=>{
     }
 
     return (
-        <div className="row wrapper p-5">
+        <div className="row wrapper">
             <div className="col-10 col-lg-8">
                 <form
                 className="shadow rounded bg-body"

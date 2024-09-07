@@ -26,7 +26,6 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
                     dbConnect()
                     const { email, password } = credentials;
                     const user = await User.findOne({ email }).select("+password");
-                    console.log('mithilesh=>',user);
                     if(!user) {
                         throw new Error('Invalid email or password');
                     }
@@ -46,7 +45,6 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
         ],
         callbacks: {
             jwt: async ({ token, user }) => {
-                console.log(token, user);
                 const jwtToken = token as Token;
                 user && (token.user = user);
 
@@ -60,7 +58,6 @@ async function auth(req: NextApiRequest, res: NextApiResponse) {
             },
             session: async ({ session, token }) => {
                 session.user = token.user as IUser;
-                console.log('session=>' , session);
                 return session;
             }
         },

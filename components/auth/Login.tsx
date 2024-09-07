@@ -21,9 +21,7 @@ const Login = () => {
             email,
             password
         })
-        console.log("result=>",result);
         
-
         setLoading(false);
         if(result?.error){
             toast.error(result.error)
