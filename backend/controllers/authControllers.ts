@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors";
 import User from "../models/user";
 import ErrorHandler from "../utils/errorHandler";
+import { delete_file, upload_file } from "../utils/cloudinary";
+import { resetPasswordHTMLTemplate } from "../utils/emailTemplates";
+import sendEmails from "../utils/sendEmails";
+import crypto from 'crypto';
+
 
 //register user => api/auth/register
 export const registerUser = catchAsyncErrors(async (req: NextRequest) => {
@@ -51,6 +56,98 @@ export const updatePassword = catchAsyncErrors(async (req: NextRequest) => {
     user.password = body.password
     await user.save();
     
+    return NextResponse.json({
+        success: true
+    })
+})
+
+//update user avatar => api/me/upload_avatar
+export const uploadAvatar = catchAsyncErrors(async (req: NextRequest) => {
+    const body = await req.json();
+    
+    const avatarResponse = await upload_file(body?.avatar,"bookit/avatars");
+    
+    //Remove existing avatar from cloudinary
+    if(req?.user?.avatar?.public_id) {
+        await delete_file(req?.user?.avatar?.public_id)
+    }
+
+    const user = await User.findByIdAndUpdate(req?.user?._id,{
+        avatar: avatarResponse
+    })
+    
+    return NextResponse.json({
+        success: true,
+        user
+    })
+})
+
+//Forgot Password => api/password/forgot
+export const forgotPassword = catchAsyncErrors(async (req: NextRequest) => {
+    const body = await req.json();
+    
+    const user = await User.findOne({ email: body.email });
+
+    if(!user){
+        throw new ErrorHandler('User not found with this email', 404);
+    }
+
+    //Get reset token
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save();
+
+    //create reset password url
+    const resetUrl = `${process.env.API_URL}password/reset/${resetToken}`;
+
+    const message = resetPasswordHTMLTemplate(user?.name, resetUrl);
+
+    try{
+        await sendEmails({
+            email: user.email,
+            subject: 'BookIT Password Recovery',
+            message
+        })
+    } catch(error: any){
+        user.resetPasswordToken = undefined
+        user.resetPasswordExpire = undefined
+        await user.save();
+
+        throw new ErrorHandler( error?.message, 500)
+    }
+        
+    return NextResponse.json({
+        success: true,
+        user
+    })
+})
+
+//Reset Password => api/password/reset/:token
+export const resetPassword = catchAsyncErrors(async (req: NextRequest, { params }:{ params: { token: string }}) => {
+    const body = await req.json();
+
+    //Hash the token
+    const resetPasswordToken = crypto.createHash('sha256').update(params.token).digest("hex");
+    
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() }
+    });
+
+    if(!user){
+        throw new ErrorHandler('Password reset token is invalid or has been expired', 404);
+    }
+
+    if(body.password !== body.confirmPassword) {
+        throw new ErrorHandler('Password does not match', 404);
+    }
+
+    // set the password
+    user.password = body.password;
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpire = undefined
+    await user.save();
+        
     return NextResponse.json({
         success: true
     })

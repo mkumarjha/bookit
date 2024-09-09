@@ -3,6 +3,7 @@ import { useUpdatePasswordMutation } from '@/redux/api/userApi';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
+import ButtonLoader from '../layout/ButtonLoader';
 
 function UpdatePassword() {
 
@@ -69,8 +70,8 @@ function UpdatePassword() {
                     />
                 </div>
 
-                <button type="submit" className="btn btn-danger form-btn w-100 py-2">
-                    Set Password
+                <button type="submit" className="btn btn-danger form-btn w-100 py-2" disabled={isLoading}>
+                    { isLoading? <ButtonLoader /> : 'Set Password' }                    
                 </button>
                 </form>
             </div>
