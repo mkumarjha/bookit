@@ -38,7 +38,7 @@ const NewPassword = ({ token }: Props) => {
     }
 
     return (
-        <div className="row wrapper">
+        <div className="row wrapper mt-5">
             <div className="col-10 col-lg-5">
                 <form
                 className="shadow rounded bg-body"
@@ -72,7 +72,7 @@ const NewPassword = ({ token }: Props) => {
                     />
                 </div>
 
-                <button type="submit" className="btn form-btn w-100 py-2" disabled={isLoading}>
+                <button type="submit" className="btn btn-danger form-btn w-100 py-2" disabled={isLoading}>
                     {isLoading ? <ButtonLoader/> : 'Set Password'}                    
                 </button>
                 </form>
