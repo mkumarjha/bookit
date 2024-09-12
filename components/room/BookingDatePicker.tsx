@@ -1,7 +1,7 @@
 "use client"
 import { IRoom } from "@/backend/models/room";
 import { calculateDaysOfStay } from "@/helpers/helpers";
-import { useNewBookingMutation } from "@/redux/api/bookingApi";
+import { useLazyCheckBookingAvailabilityQuery, useNewBookingMutation } from "@/redux/api/bookingApi";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 
@@ -19,16 +19,30 @@ const BookingDatePicker = ({ room }: Props) => {
 
     const [newBooking ] = useNewBookingMutation();
 
+    const [ checkBookingAvailability, {data} ] = useLazyCheckBookingAvailabilityQuery();
+
+    console.log("data=> ",data);
+    const isAvailable = data?.isAvailable;
+
     const onChange = (dates: Date[])=> {
+        console.log('dates=>',dates)
         const [checkInDate, checkOutDate] = dates;
+        console.log("checkindate=>", checkInDate);
+        console.log("checkoutdate=>", checkOutDate);
         setCheckInDate(checkInDate);
         setCheckOutDate(checkOutDate);
 
         if(checkInDate && checkOutDate) {
             const days = calculateDaysOfStay(checkInDate, checkOutDate);
-            console.log(days);
             setDaysOfStay(days)
+
             // check booking availability
+            checkBookingAvailability({
+                id: room._id,
+                checkInDate: checkInDate.toISOString(),
+                checkOutDate: checkOutDate.toISOString(),
+
+            });
         }
 
     }
@@ -67,6 +81,17 @@ const BookingDatePicker = ({ room }: Props) => {
                 selectsRange
                 inline
             />
+
+            {isAvailable === true ? (
+                <div className="alert alert-success my-3">
+                    Room is available. Book now.
+                </div>
+            ) : (
+                <div className="alert alert-danger my-3">
+                    Room not available. Try different dates.
+                </div>
+                )
+            }
             <button className="btn py-3 btn-danger form-btn w-100" onClick={bookRoom}>
                 Pay
             </button>
