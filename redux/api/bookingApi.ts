@@ -21,10 +21,17 @@ export const bookingApi = createApi({
                 }
             }
         }),
+        getBookedDates: builder.query({
+            query( id ){
+                return {
+                    url: `/bookings/booked_dates?roomId=${id}`,
+                }
+            }
+        }),
         
     })
 })
 
 export const { 
-    useNewBookingMutation, useLazyCheckBookingAvailabilityQuery
+    useNewBookingMutation, useLazyCheckBookingAvailabilityQuery, useGetBookedDatesQuery
 } = bookingApi;
