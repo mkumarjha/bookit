@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { catchAsyncErrors } from "../middlewares/catchAsyncErrors";
 import Booking, { IBooking } from "../models/booking";
+import Moment from "moment";
+import { extendMoment } from "moment-range";
+import ErrorHandler from "../utils/errorHandler";
 
+const moment = extendMoment(Moment);
 
 // Creating new Booking => /api/bookings
 export const newBooking = catchAsyncErrors(async(req: NextRequest) => {
@@ -39,8 +43,6 @@ export const checkRoomBookingAvailability = catchAsyncErrors(async(req: NextRequ
     const checkInDate: Date = new Date(searchParams.get('checkInDate') as string)
     const checkOutDate: Date = new Date(searchParams.get('checkOutDate') as string)
 
-    console.log(roomId, checkInDate, checkOutDate);
-
     const bookings: IBooking[] = await Booking.find({
         room: roomId,
         $and: [
@@ -53,5 +55,44 @@ export const checkRoomBookingAvailability = catchAsyncErrors(async(req: NextRequ
 
     return NextResponse.json({
         isAvailable
+    })
+})
+
+// Get room booked dates => /api/bookings/get_booked_dates
+export const getRoomBookedDates = catchAsyncErrors(async(req: NextRequest) => {
+    const { searchParams } = new URL(req.url);
+    const roomId = searchParams.get('roomId');
+    
+    const bookings = await Booking.find({ room: roomId });
+
+    const bookedDates = bookings.flatMap((booking) => Array.from(moment.range(moment(booking.checkInDate), moment(booking.checkOutDate)).by('day')))
+
+
+    return NextResponse.json({
+        bookedDates,
+    })
+})
+
+// Get room booked dates => /api/bookings/my_bookings
+export const myBookings = catchAsyncErrors(async(req: NextRequest) => {
+
+    const bookings = await Booking.find({ user: req.user._id });
+
+    return NextResponse.json({
+        bookings,
+    })
+})
+
+// Get booking details => /api/bookings/:id
+export const getBookingDetails = catchAsyncErrors(async(req: NextRequest, {params}: {params: {id: string}}) => {
+
+    const bookingDetail = await Booking.findById(params.id);
+
+    if(bookingDetail.user !== req.user._id ) {
+        throw new ErrorHandler('You can not view this booking', 403);
+    }
+
+    return NextResponse.json({
+        bookingDetail,
     })
 })

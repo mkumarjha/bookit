@@ -17,7 +17,6 @@ interface Props {
 
 const RoomDetails = ({ data }: Props) =>{
     const { room } = data;
-
     return <div className="container container-fluid">
     <h2 className="mt-5">{room?.name}</h2>
     <p>{room.address}</p>
@@ -48,7 +47,7 @@ const RoomDetails = ({ data }: Props) =>{
 
       <div className="col-12 col-md-6 col-lg-4">
         <BookingDatePicker room={room} />
-        //Room Map - TODO 
+        {/* //Room Map - TODO  */}
       </div>
     </div>
     <NewReview />    

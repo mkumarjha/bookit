@@ -1,7 +1,7 @@
 "use client"
 import { IRoom } from "@/backend/models/room";
 import { calculateDaysOfStay } from "@/helpers/helpers";
-import { useLazyCheckBookingAvailabilityQuery, useNewBookingMutation } from "@/redux/api/bookingApi";
+import { useGetBookedDatesQuery, useLazyCheckBookingAvailabilityQuery, useNewBookingMutation } from "@/redux/api/bookingApi";
 import React, { useState } from "react";
 import DatePicker from "react-datepicker";
 
@@ -12,23 +12,24 @@ interface Props {
 }
 
 const BookingDatePicker = ({ room }: Props) => {
-
+    
     const [ checkInDate, setCheckInDate ] = useState(new Date());
     const [ checkOutDate, setCheckOutDate] = useState(new Date());
     const [ daysOfStay, setDaysOfStay] = useState(0);
 
     const [newBooking ] = useNewBookingMutation();
+    
+    const { data: { bookedDates: dates } = {} } = useGetBookedDatesQuery(room?._id);
+    const excludeDates = dates?.map((date: string) => new Date(date)) || [];
 
     const [ checkBookingAvailability, {data} ] = useLazyCheckBookingAvailabilityQuery();
 
-    console.log("data=> ",data);
+    
+
     const isAvailable = data?.isAvailable;
 
     const onChange = (dates: Date[])=> {
-        console.log('dates=>',dates)
         const [checkInDate, checkOutDate] = dates;
-        console.log("checkindate=>", checkInDate);
-        console.log("checkoutdate=>", checkOutDate);
         setCheckInDate(checkInDate);
         setCheckOutDate(checkOutDate);
 
@@ -78,6 +79,7 @@ const BookingDatePicker = ({ room }: Props) => {
                 startDate={checkInDate}
                 endDate={checkOutDate}
                 minDate={new Date()}
+                excludeDates={excludeDates}
                 selectsRange
                 inline
             />
