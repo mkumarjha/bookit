@@ -1,11 +1,11 @@
 import Error from "@/app/error";
-import BookingDetails from "@/components/bookings/BookingDetails";
+import Invoice from "@/components/invoice/Invoice";
 import { getAuthHeader } from "@/helpers/authHeader";
 
 //export const dynamic = 'force-dynamic';
 
 export const metadata = {
-    title: 'My Bookings Details'
+    title: 'Bookings Invoice'
 }
 
 
@@ -17,10 +17,10 @@ const getBooking = async (id: string) => {
 
 export default async function MyBookingsPage({params}: {params: {id: string}}) {
     const data = await getBooking(params?.id);
-    console.log('ssss=>', data);
+    console.log('mmmmmssss=>', data);
     
     if(data?.errMessage) {
          return <Error error={data} />
     }
-    return <BookingDetails data={data} />
+    return <Invoice data={data} />
 }
