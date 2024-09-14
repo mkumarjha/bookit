@@ -1,8 +1,8 @@
 import Error from "@/app/error";
 import MyBookings from "@/components/bookings/MyBookings";
-import Home from "@/components/Home";
+import { getAuthHeader } from "@/helpers/authHeader";
 
-export const dynamic = 'force-dynamic';
+//export const dynamic = 'force-dynamic';
 
 export const metadata = {
     title: 'My Bookings'
@@ -10,15 +10,14 @@ export const metadata = {
 
 
 const getBookings = async () => {
-    const res = await fetch(`${ process.env.API_URL }api/bookings/me`,{
-        cache: 'no-cache'
-    });
+    const authHeader = getAuthHeader();
+    const res = await fetch(`${ process.env.API_URL }api/bookings/my_bookings`,authHeader);
     return res.json();
 }
 
 export default async function MyBookingsPage() {
     const data = await getBookings();
-    console.log()
+    console.log('gsdfsfsfsds')
     if(data?.errMessage) {
          return <Error error={data} />
     }
