@@ -4,4 +4,3 @@ declare module "bcryptjs";
 declare module "nodemailer";
 declare module "react-datepicker";
 declare module "moment";
-declare module 'mdbreact';

@@ -46,8 +46,8 @@ export const checkRoomBookingAvailability = catchAsyncErrors(async(req: NextRequ
     const bookings: IBooking[] = await Booking.find({
         room: roomId,
         $and: [
-            { chekInDate: { $lte: checkOutDate } },
-            { chekOutDate: { $gte: checkInDate } }
+            { checkInDate: { $lte: checkOutDate } },
+            { checkOutDate: { $gte: checkInDate } }
         ]
     });
 
@@ -86,13 +86,16 @@ export const myBookings = catchAsyncErrors(async(req: NextRequest) => {
 // Get booking details => /api/bookings/:id
 export const getBookingDetails = catchAsyncErrors(async(req: NextRequest, {params}: {params: {id: string}}) => {
 
-    const bookingDetail = await Booking.findById(params.id);
+    const booking = await Booking.findById(params.id).populate("user room");
+    console.log('hhhhhhhhhhh=>',booking);
 
-    if(bookingDetail.user !== req.user._id ) {
+
+
+    if(booking?.user?._id.toString() !== req.user._id ) {
         throw new ErrorHandler('You can not view this booking', 403);
     }
 
     return NextResponse.json({
-        bookingDetail,
+        booking,
     })
 })
