@@ -57,14 +57,12 @@ const BookingDatePicker = ({ room }: Props) => {
     const [stripeCheckout, {error, isLoading, data: checkoutData}] = useLazyStripeCheckoutQuery();
 
     useEffect(()=>{
-        console.log(error)
         if(error && 'data' in error) {
             toast.error(error?.data?.errMessage);
         }
 
         if(checkoutData) {
-            console.log('mmmoooooo=>',checkoutData);
-            router.replace(checkoutData?.session?.url);
+            router.replace(checkoutData?.url);
         }
 
     },[error, checkoutData])
@@ -72,7 +70,6 @@ const BookingDatePicker = ({ room }: Props) => {
     const bookRoom = () => {
         
         const amount = room.pricePerNight * daysOfStay;
-
         const checkoutData = {
             checkInDate: checkInDate.toISOString(),
             checkOutDate: checkOutDate.toISOString(),
@@ -120,11 +117,13 @@ const BookingDatePicker = ({ room }: Props) => {
                 inline
             />
 
-            {isAvailable === true ? (
+            {isAvailable === true && (
                 <div className="alert alert-success my-3">
                     Room is available. Book now.
                 </div>
-            ) : (
+            )}
+            
+            {isAvailable === false && (
                 <div className="alert alert-danger my-3">
                     Room not available. Try different dates.
                 </div>

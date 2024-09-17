@@ -22,9 +22,16 @@ export const catchAsyncErrors = (handler: HandlerFunction ) => async (req: NextR
             error.statusCode = 403;
         }
 
+        console.log("hhhhhhhhhhhhhhhhhhh=>",error);
+
         //Handling mongoose duplicate key error
         if(error.code === 11000) {
             error.message = `Duplicate ${Object.keys(error.keyValue)} entered`;
+        }
+
+
+        if(error?.name === 'MongooseError') {
+            error.message = 'Database related errors.'
         }
 
 

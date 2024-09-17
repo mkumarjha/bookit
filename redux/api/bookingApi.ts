@@ -35,7 +35,7 @@ export const bookingApi = createApi({
                     params: {
                         checkInDate: checkoutData.checkInDate,
                         checkOutDate: checkoutData.checkOutDate,
-                        daysOfStay: checkoutData.daysOfStaty,
+                        daysOfStay: checkoutData.daysOfStay,
                         amount: checkoutData.amount, 
                     }
                 }

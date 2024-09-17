@@ -17,7 +17,6 @@ const getBookings = async () => {
 
 export default async function MyBookingsPage() {
     const data = await getBookings();
-    console.log('gsdfsfsfsds')
     if(data?.errMessage) {
          return <Error error={data} />
     }

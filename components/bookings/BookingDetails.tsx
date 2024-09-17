@@ -13,8 +13,6 @@ const BookingDetails = ({data}: Props) => {
 
     const booking = data?.booking;
 
-    //console.log('mithilesh=>',booking);
-
     const isPaid = booking?.paymentInfo?.status === 'paid' ? true : false;
 
     return (
