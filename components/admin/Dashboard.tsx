@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from 'react'
 import DatePicker from 'react-datepicker';
 
@@ -32,9 +33,13 @@ const Dashboard = () => {
                         className="form-control"
                     />
                 </div>
+
+                <div className="btn form-btn ms-4 mt-3 px-5">
+                    Fetch
+                </div>
             </div>
         </div>
     )
 }
 
-export default Dashboard
+export default Dashboard;
