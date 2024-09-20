@@ -17,8 +17,6 @@ const getBooking = async (id: string) => {
 
 export default async function MyBookingsPage({params}: {params: {id: string}}) {
     const data = await getBooking(params?.id);
-    console.log('mmmmmssss=>', data);
-    
     if(data?.errMessage) {
          return <Error error={data} />
     }

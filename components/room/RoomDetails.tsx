@@ -50,8 +50,8 @@ const RoomDetails = ({ data }: Props) =>{
         {/* //Room Map - TODO  */}
       </div>
     </div>
-    <NewReview />    
-    <ListReivews />         
+    <NewReview roomId={room?._id}/>    
+    <ListReivews  reviews={room?.reviews }/>         
   </div>
 }
 
