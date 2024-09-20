@@ -1,10 +1,13 @@
 'use client'
 import React, { useState } from 'react'
 import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { SalesStats } from './SalesStats';
+import { SalesChart } from '../charts/SalesCharts';
 
 const Dashboard = () => {
-    const [startDate, setStartDate] = useState(new Date("2014/02/08"));
-    const [endDate, setEndDate] = useState(new Date("2014/02/10"));
+    const [startDate, setStartDate] = useState(new Date());
+    const [endDate, setEndDate] = useState(new Date());
     
     return (
         <div className='ps-4 my-5'>
@@ -24,7 +27,7 @@ const Dashboard = () => {
                 <div className="mb-3 me-4">
                     <label className="form-label d-block">End Date</label>
                     <DatePicker
-                        selected={startDate}
+                        selected={endDate}
                         onChange={(date: any) => setEndDate(date)}
                         selectsEnd
                         startDate={startDate}
@@ -34,8 +37,19 @@ const Dashboard = () => {
                     />
                 </div>
 
-                <div className="btn form-btn ms-4 mt-3 px-5">
+                <div className="btn form-btn ms-4 mt-3 px-5 btn-danger" >
                     Fetch
+                </div>
+            </div>
+            <SalesStats />
+            <div className="row">
+                <div className="col-12 col-lg-8">
+                <h4 className="my-5 text-center">Sales History</h4>
+                    <SalesChart />
+                </div>
+                <div className="col-12 col-lg-4 text-center">
+                <h4 className="my-5">Top Performing Rooms</h4>
+                
                 </div>
             </div>
         </div>
