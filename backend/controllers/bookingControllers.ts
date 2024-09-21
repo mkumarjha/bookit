@@ -94,7 +94,7 @@ const getLastSixMonthSales = async () => {
             // Stage 1 => filter the data
             {
                 $match: {
-                    createdAt: { $gte: startDate, $lte: endDate }
+                    createdAt: { $gte: startDate.toDate(), $lte: endDate.toDate() }
                 }
             },
 
@@ -103,7 +103,7 @@ const getLastSixMonthSales = async () => {
                 $group: {
                     _id: null,
                     totalSales: { $sum: "$amountPaid"},
-                    numberOfBookings: {$sum: 1}
+                    numOfBookings: {$sum: 1}
                 }
             }
 
@@ -126,7 +126,58 @@ const getLastSixMonthSales = async () => {
         currentDate.subtract(1, "months");
     }
 
+    return last6MonthsSales;
+}
 
+const getTopPerformingRooms = async (startDate: Date, endDate: Date) => {
+    const topRooms = await Booking.aggregate([
+        // Stage 1: Filter documents within start and end date
+        {
+            $match: {
+                createdAt: { $gte: startDate, $lte: endDate }
+            }
+        },
+        // Stage 2: Group documents by room 
+        {
+            $group: {
+                _id: "$room",
+                bookingsCount: { $sum: 1}
+            }
+        },
+        // Stage 3: Sort documents by booking count in descending order
+        {
+            $sort: {
+                bookingsCount: -1
+            }
+        },
+        // Stage 4: Limit the documents
+        {
+            $limit: 3
+        },
+        // Stage 5: Retrive additional data from room collection like room name
+        {
+            $lookup: {
+                from : 'rooms',
+                localField: "_id",
+                foreignField: "_id",
+                as: "roomData"
+            }
+        },
+        // Stage 6: Takes room data and deconstruct into documents
+        {
+            $unwind: '$roomData'
+        },
+        // Stage 7: Shape the output document (include or exclude the fields)
+        {
+            $project: {
+                _id: 0,
+                roomName: "$roomData.name",
+                bookingsCount: 1,
+            }
+        }
+    ]);
+
+    return topRooms;
 }
 
 // Get sales stats => /api/admin/sales_stats
@@ -150,8 +201,13 @@ export const getSalesStats = catchAsyncErrors(async(req: NextRequest) => {
         (acc, booking) => acc + booking.amountPaid ,0 
     );
 
+    const sixMonthSalesData = await getLastSixMonthSales();
+    const topRooms = await getTopPerformingRooms(startDate, endDate);
+
     return NextResponse.json({
         numberOfBookings,
         totalSales,
+        sixMonthSalesData,
+        topRooms
     })
 })
