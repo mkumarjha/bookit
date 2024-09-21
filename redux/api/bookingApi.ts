@@ -1,3 +1,4 @@
+import { getSalesStats } from "@/backend/controllers/bookingControllers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
@@ -41,10 +42,17 @@ export const bookingApi = createApi({
                 }
             }
         }),
+        getSalesStats: builder.query({
+            query({ startDate, endDate }){
+                return {
+                    url: `/admin/sales_stats?startDate=${startDate}&endDate=${endDate}`,
+                }
+            }
+        }),
         
     })
 })
 
 export const { 
-    useNewBookingMutation, useLazyCheckBookingAvailabilityQuery, useGetBookedDatesQuery, useLazyStripeCheckoutQuery
+    useNewBookingMutation, useLazyCheckBookingAvailabilityQuery, useGetBookedDatesQuery, useLazyStripeCheckoutQuery, useLazyGetSalesStatsQuery
 } = bookingApi;

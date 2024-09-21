@@ -83,16 +83,75 @@ export const myBookings = catchAsyncErrors(async(req: NextRequest) => {
     })
 })
 
-// Get booking details => /api/bookings/:id
-export const getBookingDetails = catchAsyncErrors(async(req: NextRequest, {params}: {params: {id: string}}) => {
+const getLastSixMonthSales = async () => {
+    const last6MonthsSales : any = []
 
-    const booking = await Booking.findById(params.id).populate("user room");
-    
-    if(booking?.user?._id.toString() !== req.user._id ) {
-        throw new ErrorHandler('You can not view this booking', 403);
+    // Get Current date
+    const currentDate = moment();
+
+    async function fetchSalesForMonth(startDate: moment.Moment, endDate: moment.Moment) {
+        const result = await Booking.aggregate([
+            // Stage 1 => filter the data
+            {
+                $match: {
+                    createdAt: { $gte: startDate, $lte: endDate }
+                }
+            },
+
+            // Stage 2 => Grouping the data
+            {
+                $group: {
+                    _id: null,
+                    totalSales: { $sum: "$amountPaid"},
+                    numberOfBookings: {$sum: 1}
+                }
+            }
+
+        ]);
+
+        const { totalSales, numOfBookings } = result?.length > 0 ? result[0] : {totalSales: 0, numOfBookings: 0 };
+
+
+        last6MonthsSales.push({
+            monthName: startDate.format("MMMM"),
+            totalSales, 
+            numOfBookings})
     }
 
+    for (let i = 0; i < 6; i++) {
+        const startDate = moment(currentDate).startOf('month'); 
+        const endDate = moment(currentDate).endOf('month'); 
+
+        await fetchSalesForMonth(startDate, endDate);
+        currentDate.subtract(1, "months");
+    }
+
+
+}
+
+// Get sales stats => /api/admin/sales_stats
+export const getSalesStats = catchAsyncErrors(async(req: NextRequest) => {
+
+    const { searchParams } = new URL(req.url);
+
+    const startDate = new Date(searchParams.get('startDate') as string);
+    const endDate = new Date(searchParams.get('endDate') as string);
+
+    startDate.setHours(0,0,0,0)
+    endDate.setHours(23,59,59,999)
+
+    const bookings = await Booking.find({
+        createdAt: { $gte: startDate, $lte: endDate }
+    })
+
+    const numberOfBookings = bookings.length;
+
+    const totalSales = bookings.reduce(
+        (acc, booking) => acc + booking.amountPaid ,0 
+    );
+
     return NextResponse.json({
-        booking,
+        numberOfBookings,
+        totalSales,
     })
 })
