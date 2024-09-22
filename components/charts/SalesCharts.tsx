@@ -21,39 +21,101 @@ ChartJS.register(
   Legend
 );
 
-export const options = {
-  responsive: true,
-  plugins: {
-    legend: {
-      position: 'top' as const,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
-    },
-  },
-};
+interface SalesData {
+    monthName: string;
+    totalSales: number;
+    numOfBookings: number;
+}
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+interface Props {
+    salesData: SalesData[];
+}
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: 'Dataset 1',
-      data: [12,34,53,65,34,24],
-      borderColor: 'rgb(255, 99, 132)',
-      backgroundColor: 'rgba(255, 99, 132, 0.5)',
-    },
-    {
-      label: 'Dataset 2',
-      data: [45,37,10,80,72,90],
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
 
-export function SalesChart() {
-  return <Line options={options} data={data} />;
+export function SalesChart({ salesData }: Props) {
+    // const options = {
+    //     responsive: true,
+    //     plugins: {
+    //     legend: {
+    //         position: 'top' as const,
+    //     },
+    //     title: {
+    //         display: true,
+    //         text: 'Last 6 Months Performance',
+    //     },
+    //     },
+    // };
+  
+    // const data = {
+    //     labels: salesData?.map((data)=> data.monthName).reverse(),
+    //     datasets: [
+    //     {
+    //         label: 'Sales',
+    //         data: salesData?.map((data)=> data.totalSales).reverse(),
+    //         borderColor: 'rgb(255, 99, 132)',
+    //         backgroundColor: 'rgba(255, 99, 132, 0.5)',
+    //     },
+    //     {
+    //         label: 'Bookings',
+    //         data: salesData?.map((data)=> data.numOfBookings).reverse(),
+    //         borderColor: 'rgb(53, 162, 235)',
+    //         backgroundColor: 'rgba(53, 162, 235, 0.5)',
+    //     },
+    //     ],
+    // };
+
+
+    const options = {
+        responsive: true,
+        interaction: {
+          mode: 'index' as const,
+          intersect: false,
+        },
+        stacked: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Last 6 Months Performance",
+          },
+        },
+        scales: {
+          y: {
+            type: 'linear' as const,
+            display: true,
+            position: 'left' as const,
+          },
+          y1: {
+            type: 'linear' as const,
+            display: true,
+            position: 'right' as const,
+            grid: {
+              drawOnChartArea: false,
+            },
+          },
+        },
+    };
+      
+      
+      
+    const data = {
+        labels: salesData?.map((data)=> data.monthName).reverse(),
+        datasets: [
+          {
+            label: 'Sales',
+            data: salesData?.map((data)=> data.totalSales).reverse(),
+            borderColor: 'rgb(255, 99, 132)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            yAxisID: 'y',
+          },
+          {
+            label: 'Bookings',
+            data: salesData?.map((data)=> data.numOfBookings).reverse(),
+            borderColor: 'rgb(53, 162, 235)',
+            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            yAxisID: 'y1',
+          },
+        ],
+    };
+      
+    return <Line options={options} data={data} />;
 }

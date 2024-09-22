@@ -1,13 +1,43 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { SalesStats } from './SalesStats';
 import { SalesChart } from '../charts/SalesCharts';
+import { TopPerformingChart } from '../charts/TopPerformingChart';
+import { useLazyGetSalesStatsQuery } from '@/redux/api/bookingApi';
+import toast from 'react-hot-toast';
+import Loading from '@/app/admin/loading';
 
 const Dashboard = () => {
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+
+    const [ getSalesStats,{ error, data, isLoading }] = useLazyGetSalesStatsQuery();
+
+    useEffect(()=>{
+        if(error && 'data' in error) {
+            toast.error(error?.data?.message);
+        }
+
+        if(startDate && endDate && !data) {
+            getSalesStats({
+                startDate: startDate.toISOString(),
+                endDate: endDate.toDateString()
+            })
+        }
+
+    },[error])
+
+    const submitHandler = () => {
+        getSalesStats({
+            startDate: startDate.toISOString(),
+            endDate: endDate.toDateString()
+        })
+    }
+
+    console.log(data)
+    if(!data) return <Loading />
     
     return (
         <div className='ps-4 my-5'>
@@ -37,19 +67,25 @@ const Dashboard = () => {
                     />
                 </div>
 
-                <div className="btn form-btn ms-4 mt-3 px-5 btn-danger" >
+                <div className="btn form-btn ms-4 mt-3 px-5 btn-danger" onClick={submitHandler}>
                     Fetch
                 </div>
             </div>
-            <SalesStats />
+            <SalesStats data={data} />
             <div className="row">
                 <div className="col-12 col-lg-8">
                 <h4 className="my-5 text-center">Sales History</h4>
-                    <SalesChart />
+                    <SalesChart salesData={data?.sixMonthSalesData} />
                 </div>
                 <div className="col-12 col-lg-4 text-center">
                 <h4 className="my-5">Top Performing Rooms</h4>
-                
+                {data?.topRooms.length > 0 ? 
+                (
+                    <TopPerformingChart rooms={data?.topRooms}/>                                    
+                ):
+                (
+                    <p className="mt-5">No data available</p>
+                )}
                 </div>
             </div>
         </div>
