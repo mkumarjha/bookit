@@ -12,64 +12,62 @@ interface Props {
 }
 
 const MyBookings = ({ data }: Props) => {
-  const bookings = data?.bookings;
+    const bookings = data?.bookings;
+    const setBookings = () => {
+        const data: { columns: any[]; rows: any[] } = {
+            columns: [
+                {
+                label: "ID",
+                field: "id",
+                sort: "asc",
+                },
+                {
+                label: "Check In",
+                field: "checkin",
+                sort: "asc",
+                },
+                {
+                label: "Check Out",
+                field: "checkout",
+                sort: "asc",
+                },
+                {
+                label: "Amount Paid",
+                field: "amountpaid",
+                sort: "asc",
+                },
+                {
+                label: "Actions",
+                field: "actions",
+                sort: "asc",
+                },
+            ],
+            rows: []
+        };
 
-  const setBookings = () => {
-    const data: { columns: any[]; rows: any[] } = {
-      columns: [
-        {
-          label: "ID",
-          field: "id",
-          sort: "asc",
-        },
-        {
-          label: "Check In",
-          field: "checkin",
-          sort: "asc",
-        },
-        {
-          label: "Check Out",
-          field: "checkout",
-          sort: "asc",
-        },
-        {
-          label: "Amount Paid",
-          field: "amountpaid",
-          sort: "asc",
-        },
-        {
-          label: "Actions",
-          field: "actions",
-          sort: "asc",
-        },
-      ],
-      rows: []
-    };
-
-    bookings?.forEach((booking) => {
-        data?.rows?.push({
-            id: booking._id,
-            checkin: new Date(booking?.checkInDate).toLocaleString("en-US"),
-            checkout: new Date(booking?.checkOutDate).toLocaleString("en-US"),
-            amountpaid: `$${booking?.amountPaid}`,
-            actions: (
-                <>
-                    <Link href={`/bookings/${booking._id}`} className="btn btn-primary">
-                    {" "}
-                    <i className="fa fa-eye"></i>{" "}
-                    </Link>
-                    <Link
-                    href={`/bookings/invoice/${booking._id}`}
-                    className="btn btn-success ms-2"
-                    >
-                    {" "}
-                    <i className="fa fa-receipt"></i>{" "}
-                    </Link>
-                </>
-                ),
+        bookings?.forEach((booking) => {
+            data?.rows?.push({
+                id: booking._id,
+                checkin: new Date(booking?.checkInDate).toLocaleString("en-US"),
+                checkout: new Date(booking?.checkOutDate).toLocaleString("en-US"),
+                amountpaid: `$${booking?.amountPaid}`,
+                actions: (
+                    <>
+                        <Link href={`/bookings/${booking._id}`} className="btn btn-primary">
+                        {" "}
+                        <i className="fa fa-eye"></i>{" "}
+                        </Link>
+                        <Link
+                        href={`/bookings/invoice/${booking._id}`}
+                        className="btn btn-success ms-2"
+                        >
+                        {" "}
+                        <i className="fa fa-receipt"></i>{" "}
+                        </Link>
+                    </>
+                    ),
             });
         });
-
         return data;
     };
 

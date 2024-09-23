@@ -14,7 +14,7 @@ const AdminSidebar = () => {
         {
             name: 'Rooms',
             url: '/admin/rooms',
-            icon: 'fas fa-hotal'
+            icon: 'fas fa-hotel'
         },
         {
             name: 'Bookings',
