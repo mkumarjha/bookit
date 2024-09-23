@@ -20,8 +20,17 @@ export const roomApi = createApi({
                     body
                 }
             }
+        }),
+        newRoom: builder.mutation({
+            query(body){
+                return {
+                    url: '/admin/rooms',
+                    method: 'POST',
+                    body
+                }
+            }
         })
     })
 })
 
-export const { usePostReviewMutation, useCanUserReviewMutation } = roomApi
+export const { usePostReviewMutation, useCanUserReviewMutation, useNewRoomMutation } = roomApi
