@@ -4,6 +4,7 @@ import { catchAsyncErrors } from "../middlewares/catchAsyncErrors";
 import ErrorHandler from "../utils/errorHandler";
 import APIFilters from "../utils/apiFilters";
 import Booking from "../models/booking";
+import { upload_file } from "../utils/cloudinary";
 
 // Get all rooms => /api/rooms
 export const allRooms = catchAsyncErrors(async(req: NextRequest) => {
@@ -63,7 +64,7 @@ export const getRoomDetails = catchAsyncErrors (async(req: NextRequest, { params
     })
 })
 
-// Update room details => /api/rooms/:id
+// Update room details => /api/admin/rooms/:id
 export const updateRoom = catchAsyncErrors (async(req: NextRequest, { params } : {params: { id: string}}) => {
     
     let room = await Room.findById(params.id);
@@ -75,6 +76,31 @@ export const updateRoom = catchAsyncErrors (async(req: NextRequest, { params } :
     room = await Room.findByIdAndUpdate(params.id, body, {
         new: true
     });
+
+    return NextResponse.json({
+        success: true,
+        room
+    })
+})
+
+
+// upload room images => /api/admin/rooms/:id/upload_images
+export const uploadRoomImages = catchAsyncErrors (async(req: NextRequest, { params } : {params: { id: string}}) => {
+    
+    let room = await Room.findById(params.id);
+    const body = await req.json();
+
+    if(!room){
+        throw new ErrorHandler('Room not found', 404);
+    }
+
+    const uploader = async (image: string) => upload_file('image','bookit/rooms')
+
+    const urls = (await Promise.all(body?.images)).map(uploader);
+
+    room?.images?.push(...urls);
+
+    await room.save();
 
     return NextResponse.json({
         success: true,

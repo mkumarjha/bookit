@@ -1,3 +1,4 @@
+import { uploadRoomImages } from "@/backend/controllers/roomControllers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 
@@ -29,8 +30,33 @@ export const roomApi = createApi({
                     body
                 }
             }
+        }),
+        updateRoom: builder.mutation({
+            query({id, body}){
+                return {
+                    url: `/admin/rooms/${id}`,
+                    method: 'PUT',
+                    body
+                }
+            }
+        }),
+        uploadRoomImages: builder.mutation({
+            query({id, body}){
+                return {
+                    url: `/admin/rooms/${id}/upload_images`,
+                    method: 'PUT',
+                    body
+                }
+            }
         })
     })
 })
 
-export const { usePostReviewMutation, useCanUserReviewMutation, useNewRoomMutation } = roomApi
+export const { 
+    usePostReviewMutation, 
+    useCanUserReviewMutation, 
+    useNewRoomMutation, 
+    useUpdateRoomMutation,
+    useUploadRoomImagesMutation
+
+ } = roomApi
