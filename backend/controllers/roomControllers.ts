@@ -221,4 +221,4 @@ export const allAdminRooms = catchAsyncErrors (async(req: NextRequest) => {
     return NextResponse.json({
         rooms
     })
-})
+});

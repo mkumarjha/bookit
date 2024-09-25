@@ -45,7 +45,7 @@ export interface IRoom extends Document {
     createdAt: Date;
 } 
 
-const roomSchema: Schema<IRoom> = new Schema({
+const roomSchema: Schema<IRoom> = new mongoose.Schema({
     name: {
         type: String,
         required: [true, 'Please enter room name'],
@@ -157,7 +157,7 @@ const roomSchema: Schema<IRoom> = new Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
+        required: false
     },
     createdAt: {
         type: Date,
