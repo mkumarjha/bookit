@@ -83,6 +83,25 @@ export const myBookings = catchAsyncErrors(async(req: NextRequest) => {
     })
 })
 
+
+// Get booking details   =>  /api/bookings/:id
+export const getBookingDetails = catchAsyncErrors(
+    async (req: NextRequest, { params }: { params: { id: string } }) => {
+        console.log("params", params);
+        
+        const booking = await Booking.findById(params.id).populate("user room");
+        
+        console.log("booking=>>>>>",booking); exit;
+        if (booking.user?._id?.toString() !== req.user._id) {
+            throw new ErrorHandler("You can not view this booking", 403);
+        }
+    
+        return NextResponse.json({
+            booking,
+        });
+    }
+  );
+
 const getLastSixMonthSales = async () => {
     const last6MonthsSales : any = []
 
@@ -211,3 +230,13 @@ export const getSalesStats = catchAsyncErrors(async(req: NextRequest) => {
         topRooms
     })
 })
+
+// Get admin bookings => /api/admin/bookings
+export const allAdminBookings = catchAsyncErrors(async(req: NextRequest) => {
+    const bookings = await Booking.find();
+
+    return NextResponse.json({
+        bookings,
+    })
+})
+

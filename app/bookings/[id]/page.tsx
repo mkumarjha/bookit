@@ -20,5 +20,7 @@ export default async function MyBookingsPage({params}: {params: {id: string}}) {
     if(data?.errMessage) {
          return <Error error={data} />
     }
+
+    console.log("sssss", data);
     return <BookingDetails data={data} />
 }
