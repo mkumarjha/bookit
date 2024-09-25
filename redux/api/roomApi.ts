@@ -48,6 +48,23 @@ export const roomApi = createApi({
                     body
                 }
             }
+        }),
+        deleteRoomImage: builder.mutation({
+            query({id, body}){
+                return {
+                    url: `/admin/rooms/${id}/delete_image`,
+                    method: 'PUT',
+                    body
+                }
+            }
+        }),
+        deleteRoom: builder.mutation({
+            query(id){
+                return {
+                    url: `/admin/rooms/${id}`,
+                    method: 'DELETE'
+                }
+            }
         })
     })
 })
@@ -57,6 +74,7 @@ export const {
     useCanUserReviewMutation, 
     useNewRoomMutation, 
     useUpdateRoomMutation,
-    useUploadRoomImagesMutation
-
+    useUploadRoomImagesMutation,
+    useDeleteRoomImageMutation,
+    useDeleteRoomMutation
  } = roomApi
