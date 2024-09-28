@@ -13,7 +13,6 @@ interface RequestContext {
 const router = createEdgeRouter<NextRequest, RequestContext>();
 
 dbConnect();
-
 router.use(isAuthenticatedUser, authorizeRoles('admin')).get(getUserDetails);
 router.use(isAuthenticatedUser, authorizeRoles('admin')).put(updateUser);
 

@@ -38,7 +38,16 @@ export const userApi = createApi({
                     body
                 }
             }
-        })
+        }),
+        updateUser: builder.mutation({
+            query({id, body}){
+                return {
+                    url: `/admin/users/${id}`,
+                    method: 'PUT',
+                    body
+                }
+            }
+        }),
     })
 })
 
@@ -46,5 +55,6 @@ export const {
     useUpdateProfileMutation, 
     useLazyUpdateSessionQuery, 
     useUpdatePasswordMutation,
-    useUploadAvatarMutation
+    useUploadAvatarMutation,
+    useUpdateUserMutation
 } = userApi

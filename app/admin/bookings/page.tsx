@@ -16,7 +16,7 @@ const getBookings = async () => {
     return rooms.json();
 }
 
-export default async function AdminRoomsPage() {
+export default async function AdminBookingsPage() {
     const data = await getBookings();
     if(data?.errMessage) {
         return <Error error={data} />
