@@ -1,6 +1,7 @@
 "use client";
 
 import { IUser } from "@/backend/models/user";
+import { useDeleteUserMutation } from "@/redux/api/userApi";
 import { MDBDataTable } from "mdbreact";
 import moment from "moment";
 import Link from "next/link";
@@ -19,23 +20,23 @@ const AllUsers = ({ data }: Props) => {
     const users = data?.users;
 
     const router = useRouter();
-    // const [deleteBooking, { error, isLoading, isSuccess}] = useDeleteBookingMutation();
+    const [deleteUser, { error, isLoading, isSuccess}] = useDeleteUserMutation();
 
-    // useEffect(()=>{
-    //     if(error && 'data' in error) {
-    //         toast.error(error?.data?.errMessage)
-    //     }
+    useEffect(()=>{
+        if(error && 'data' in error) {
+            toast.error(error?.data?.errMessage)
+        }
 
-    //     if(isSuccess) {
-    //         router.refresh();
-    //         toast.success("Booking Deleted");
-    //     }
+        if(isSuccess) {
+            router.refresh();
+            toast.success("User Deleted");
+        }
 
-    // },[error, isSuccess]);
+    },[error, isSuccess]);
 
-    // const deleteBookingHandler = (id: string) => {
-    //     deleteBooking(id);
-    // }
+    const deleteUserHandler = (id: string) => {
+        deleteUser(id);
+    }
 
     const setUsers = () => {
         const data: { columns: any[]; rows: any[] } = {
@@ -84,9 +85,8 @@ const AllUsers = ({ data }: Props) => {
                         </Link>
                         
                         <button className="btn btn-outline-danger mx-2" 
-                        //disabled={isLoading} onClick={() => deleteBookingHandler(user?._id.toString())}
-
-                        >
+                        disabled={isLoading} 
+                        onClick={() => deleteUserHandler(user?._id.toString())} >
                             <i className="fa fa-trash"></i>
                         </button>
                     </>
