@@ -1,10 +1,13 @@
 "use client";
 
 import { IBooking } from "@/backend/models/booking";
+import { useDeleteBookingMutation } from "@/redux/api/bookingApi";
 import { MDBDataTable } from "mdbreact";
 import moment from "moment";
 import Link from "next/link";
-import React from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import toast from "react-hot-toast";
 
 interface Props {
   data: {
@@ -13,7 +16,28 @@ interface Props {
 }
 
 const AllBookings = ({ data }: Props) => {
+
     const bookings = data?.bookings;
+
+    const router = useRouter();
+    const [deleteBooking, { error, isLoading, isSuccess}] = useDeleteBookingMutation();
+
+    useEffect(()=>{
+        if(error && 'data' in error) {
+            toast.error(error?.data?.errMessage)
+        }
+
+        if(isSuccess) {
+            router.refresh();
+            toast.success("Booking Deleted");
+        }
+
+    },[error, isSuccess]);
+
+    const deleteBookingHandler = (id: string) => {
+        deleteBooking(id);
+    }
+
     const setBookings = () => {
         const data: { columns: any[]; rows: any[] } = {
             columns: [
@@ -51,18 +75,18 @@ const AllBookings = ({ data }: Props) => {
 
                 actions: (
                     <>
-                        <Link href={`/bookings/${booking._id}`} className="btn btn-primary">
+                        <Link href={`/bookings/${booking._id}`} className="btn btn-outline-primary">
                         {" "}
                         <i className="fa fa-eye"></i>{" "}
                         </Link>
                         <Link
                         href={`/bookings/invoice/${booking._id}`}
-                        className="btn btn-success ms-2"
+                        className="btn btn-outline-success ms-2"
                         >
                         {" "}
                         <i className="fa fa-receipt"></i>{" "}
                         </Link>
-                        <button className="btn btn-outline-danger mx-2">
+                        <button className="btn btn-outline-danger mx-2" disabled={isLoading} onClick={() => deleteBookingHandler(booking?._id.toString())}>
                             <i className="fa fa-trash"></i>
                         </button>
                     </>

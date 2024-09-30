@@ -38,7 +38,24 @@ export const userApi = createApi({
                     body
                 }
             }
-        })
+        }),
+        updateUser: builder.mutation({
+            query({id, body}){
+                return {
+                    url: `/admin/users/${id}`,
+                    method: 'PUT',
+                    body
+                }
+            }
+        }),
+        deleteUser: builder.mutation({
+            query(id){
+                return {
+                    url: `/admin/users/${id}`,
+                    method: 'DELETE',
+                }
+            }
+        }),
     })
 })
 
@@ -46,5 +63,7 @@ export const {
     useUpdateProfileMutation, 
     useLazyUpdateSessionQuery, 
     useUpdatePasswordMutation,
-    useUploadAvatarMutation
+    useUploadAvatarMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation
 } = userApi
