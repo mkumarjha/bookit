@@ -1,15 +1,14 @@
-import { uploadRoomImages } from "@/backend/controllers/roomControllers";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
 
 export const roomApi = createApi({
     reducerPath: 'roomApi',
     baseQuery: fetchBaseQuery({ baseUrl: '/api'}),
+    tagTypes: ['Reviews'],
     endpoints: (builder) => ({
-        canUserReview: builder.mutation({
+        canUserReview: builder.query({
             query(id){
                 return {
-                    url: `/reviews/can_reivew?roomId=${id}`
+                    url: `/reviews/can_review?roomId=${id}`
                 }
             }
         }),
@@ -65,16 +64,35 @@ export const roomApi = createApi({
                     method: 'DELETE'
                 }
             }
+        }),
+        getRoomReviews: builder.query({
+            query(id){
+                return {
+                    url: `/admin/rooms/reviews?roomId=${id}`
+                }
+            }, 
+            providesTags: ['Reviews']
+        }),
+        deleteReview: builder.mutation({
+            query({id, roomId}){
+                return {
+                    url: `/admin/rooms/reviews/?id=${id}&roomId=${roomId}`,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags: ['Reviews']
         })
     })
 })
 
 export const { 
     usePostReviewMutation, 
-    useCanUserReviewMutation, 
+    useCanUserReviewQuery, 
     useNewRoomMutation, 
     useUpdateRoomMutation,
     useUploadRoomImagesMutation,
     useDeleteRoomImageMutation,
-    useDeleteRoomMutation
+    useDeleteRoomMutation,
+    useLazyGetRoomReviewsQuery,
+    useDeleteReviewMutation
  } = roomApi

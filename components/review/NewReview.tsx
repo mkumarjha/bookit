@@ -1,4 +1,5 @@
-import { useCanUserReviewMutation, usePostReviewMutation } from "@/redux/api/roomApi";
+import { useCanUserReviewQuery, usePostReviewMutation } from "@/redux/api/roomApi";
+import { revalidateTag } from "@/helpers/revalidate";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
@@ -12,7 +13,7 @@ const NewReview = ({ roomId }: { roomId: string }) => {
 
     const router = useRouter();
 
-    const { data : { canReview } = {} } = useCanUserReviewMutation();
+    const { data : { canReview } = {} } = useCanUserReviewQuery(roomId);
 
     const [postReview, { error, isSuccess }] = usePostReviewMutation();
 
@@ -22,6 +23,7 @@ const NewReview = ({ roomId }: { roomId: string }) => {
         }
 
         if(isSuccess){
+            revalidateTag("RoomDetails");
             toast.success('Review Post');
             router.refresh();
         }
@@ -95,7 +97,7 @@ const NewReview = ({ roomId }: { roomId: string }) => {
                     <div className="modal-footer">
                         <button
                             type="button"
-                            className="btn my-3 form-btn w-100"
+                            className="btn btn-danger my-3 form-btn w-100"
                             data-bs-dismiss="modal"
                             aria-label="Close"
                             onClick={submitHandler}
