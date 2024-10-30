@@ -246,7 +246,7 @@ export const deleteRoomReview = catchAsyncErrors (async(req: NextRequest) => {
 
     const room = await Room.findById(roomId);
     const reviews = room.reviews.filter(
-        (review: IReview) => review?._id.toString() !== reviewId
+        (review: IReview) => review?.id.toString() !== reviewId
     );
 
     const numOfReviews = reviews.length;

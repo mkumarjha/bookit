@@ -18,12 +18,12 @@ const Home = ({ data }: Props) => {
     const searchParams = useSearchParams();
     const location = searchParams.get('location');
     
-    const {rooms, resPerPage, filteredRoomsCount } = data ;
+    const {rooms, resPerPage, filteredRoomCount } = data ;
     return (
         <div>
             <section id="rooms" className="container mt-5">
                 <h2 className="mb-3 ml-2 stays-heading">
-                    {location ? `${filteredRoomsCount} rooms found in ${location}`: `All Rooms`}
+                    {location ? `${filteredRoomCount} rooms found in ${location}`: `All Rooms`}
                 </h2>
                 <Link href="/search" className="ml-2 back-to-search me-1">
                 <i className="fa fa-arrow-left"></i> Back to Search
@@ -33,12 +33,13 @@ const Home = ({ data }: Props) => {
                             <div className="alert alert-danger mt-5 w-100">
                                 <b>No Rooms</b>
                             </div>
-                        ) : 
-                        rooms?.map((room) => <RoomItem key={room._id} room={room}/>)
+                        ) : (
+                        rooms?.map((room) => <RoomItem key={room.id} room={room}/>)
+                        )
                     }
                 </div>
             </section>
-            <CustomPagination resPerPage={resPerPage} filteredRoomsCount={filteredRoomsCount} />
+            <CustomPagination resPerPage={resPerPage} filteredRoomsCount={filteredRoomCount} />
         </div>
     );
 }
