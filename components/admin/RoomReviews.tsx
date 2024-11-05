@@ -72,7 +72,7 @@ const RoomReviews = () => {
                     <>
                         <button className="btn btn-outline-danger mx-2" 
                         disabled={isLoading} 
-                        onClick={() => deleteReviewHandler(review?._id)} 
+                        onClick={() => deleteReviewHandler(review?.id)} 
                         >
                             <i className="fa fa-trash"></i>
                         </button>
