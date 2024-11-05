@@ -86,7 +86,7 @@ const AllUsers = ({ data }: Props) => {
                         
                         <button className="btn btn-outline-danger mx-2" 
                         disabled={isLoading} 
-                        onClick={() => deleteUserHandler(user?._id.toString())} >
+                        onClick={() => deleteUserHandler(user?.id.toString())} >
                             <i className="fa fa-trash"></i>
                         </button>
                     </>

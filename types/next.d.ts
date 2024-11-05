@@ -7,9 +7,3 @@ declare module "next/server" {
         user: IUser;
     }
 }
-
-declare module "@reduxjs/toolkit/query/react" {
-    interface FetchBaseQueryError {
-        data?: any;
-    }
-}

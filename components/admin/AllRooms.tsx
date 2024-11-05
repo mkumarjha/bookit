@@ -69,7 +69,7 @@ const AllRooms = ({ data }: Props) => {
                         {" "}
                         <i className="fa fa-images"></i>{" "}
                         </Link>
-                        <button className="btn btn-outline-danger ms-2" onClick={() => deleteRoomHandler(room._id)}
+                        <button className="btn btn-outline-danger ms-2" onClick={() => deleteRoomHandler(room.id)}
                         >
                         {" "}
                         <i className="fa fa-trash"></i>{" "}

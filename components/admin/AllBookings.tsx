@@ -86,7 +86,7 @@ const AllBookings = ({ data }: Props) => {
                         {" "}
                         <i className="fa fa-receipt"></i>{" "}
                         </Link>
-                        <button className="btn btn-outline-danger mx-2" disabled={isLoading} onClick={() => deleteBookingHandler(booking?._id.toString())}>
+                        <button className="btn btn-outline-danger mx-2" disabled={isLoading} onClick={() => deleteBookingHandler(booking?.id.toString())}>
                             <i className="fa fa-trash"></i>
                         </button>
                     </>
